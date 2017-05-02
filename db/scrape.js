@@ -21,7 +21,7 @@ connection.connect(function(err) {
 });
 
 
-request('http://www.nfl.com/stats/categorystats?tabSeq=0&statisticCategory=PASSING&conference=null&season=2016&seasonType=REG&d-447263-s=PASSING_YARDS&d-447263-o=2&d-447263-n=1', function (error, response, body) {
+request('https://fantasyfootballers.org/qb-quarterback-nfl-stats/', function (error, response, body) {
 
   // console.log(body);
 
@@ -35,7 +35,7 @@ request('http://www.nfl.com/stats/categorystats?tabSeq=0&statisticCategory=PASSI
     tableRows.slice(1).each(function(i, element) {
       "use strict";
       let cleanRow = [];
-      let justThese = [1, 2, 4, 5, 8, 11, 12];
+      let justThese = [1, 2, 3, 4, 5, 6, 8, 9, 13, 14, 15];
       let tds = $(element).children('td');
       
       tds.each(function(tdIndex, td){
@@ -46,7 +46,7 @@ request('http://www.nfl.com/stats/categorystats?tabSeq=0&statisticCategory=PASSI
         if (justThese.indexOf(i) >= 0) return el;
       });
 
-      connection.query("INSERT INTO quarterbacks (player, team, comp, att, yards, tds, interceptions) VALUES (?, ?, ?, ?, ?, ?, ?)", [
+      connection.query("INSERT INTO quarterbacks (player, team, passydsgm, att, comp, passcomp, tds, interceptions, rushyds, rushtds, games) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
               filteredRow[0],
               filteredRow[1],
               filteredRow[2],
@@ -54,6 +54,10 @@ request('http://www.nfl.com/stats/categorystats?tabSeq=0&statisticCategory=PASSI
               filteredRow[4],
               filteredRow[5],
               filteredRow[6],
+              filteredRow[7],
+              filteredRow[8],
+              filteredRow[9],
+              filteredRow[10]
             ], function(err, res) {
               if (err) return console.log(err);
               else console.log('done')

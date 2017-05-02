@@ -21,7 +21,7 @@ connection.connect(function(err) {
 });
 
 
-request('https://fantasyfootballers.org/rb-running-back-nfl-stats/', function (error, response, body) {
+request('https://fantasyfootballers.org/nfl-team-defense-fantasy-stats/', function (error, response, body) {
 
   // console.log(body);
 
@@ -35,7 +35,7 @@ request('https://fantasyfootballers.org/rb-running-back-nfl-stats/', function (e
     tableRows.slice(1).each(function(i, element) {
       "use strict";
       let cleanRow = [];
-      let justThese = [1, 2, 3, 4, 5, 6, 8, 12, 13, 15];
+      let justThese = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 17, 18, 19];
       let tds = $(element).children('td');
       
       tds.each(function(tdIndex, td){
@@ -45,9 +45,8 @@ request('https://fantasyfootballers.org/rb-running-back-nfl-stats/', function (e
       let filteredRow = cleanRow.filter(function(el, i){
         if (justThese.indexOf(i) >= 0) return el;
       });
-
-      
-      connection.query("INSERT INTO runningbacks (player, team, rushydsgm, attgm, rushatt, rushyds, rushtds, rec, recyds, rectds) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
+      //player, team, pos, rec, yards, avg, ydsg, tds
+      connection.query("INSERT INTO defense (team, fpsgm, ptsallowed, intgm, fumrecgm, sacksgm, totalint, totalfum, totalsacks, safeties, deftds, qbpts, rbpts, wrpts, tepts, kickerpts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
               filteredRow[0],
               filteredRow[1],
               filteredRow[2],
@@ -57,7 +56,13 @@ request('https://fantasyfootballers.org/rb-running-back-nfl-stats/', function (e
               filteredRow[6],
               filteredRow[7],
               filteredRow[8],
-              filteredRow[9]
+              filteredRow[9],
+              filteredRow[10],
+              filteredRow[11],
+              filteredRow[12],
+              filteredRow[13],
+              filteredRow[14],
+              filteredRow[15]
             ], function(err, res) {
               if (err) return console.log(err);
               else console.log('done')
